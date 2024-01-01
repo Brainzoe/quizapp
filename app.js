@@ -14,10 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB connection setup
-mongoose.connect('mongodb://localhost/quizApp', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb://localhost/quizApp');
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Routes setup
