@@ -1,0 +1,41 @@
+{
+  "name": "quizapp",
+  "version": "1.0.0",
+  "description": "A full-stack quiz application allowing users to create, attempt, and grade quizzes dynamically.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint-ejs": "ejs-lint mainLayout.ejs quizResult.ejs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brainzoe/quizapp.git"
+  },
+  "keywords": [
+    "quiz",
+    "express",
+    "mongodb",
+    "ejs",
+    "full-stack"
+  ],
+  "author": "John Igolo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brainzoe/quizapp/issues"
+  },
+  "homepage": "https://github.com/Brainzoe/quizapp#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.0.3",
+    "nodemon": "^3.0.2"
+  },
+  "devDependencies": {
+    "ejs-lint": "^2.0.0"
+  }
+}

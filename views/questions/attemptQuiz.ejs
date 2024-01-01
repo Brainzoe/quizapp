@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App - Attempt Quiz</title>
+  <!-- Add necessary stylesheets -->
+</head>
+<body>
+  <h1>Attempt Quiz</h1>
+  <form action="/attempt" method="POST">
+    <% questions.forEach((question, index) => { %>
+      <h3><%= question.question %></h3>
+      <% question.answers.forEach((answer, ansIndex) => { %>
+        <input type="radio" name="answer_<%= index %>" value="<%= ansIndex %>">
+        <label><%= answer %></label><br>
+      <% }) %>
+    <% }) %>
+    <button type="submit">Submit Answers</button>
+  </form>
+  <script src="../public/js/quizScript.js"></script>
+</body>
+</html>

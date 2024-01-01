@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App - Quiz Result</title>
+  <!-- Add necessary stylesheets -->
+</head>
+<body>
+  <h1>Quiz Result</h1>
+  <% if (score !== undefined) { %>
+    <p>Your score: <%= score %> out of <%= totalQuestions %></p>
+    <!-- Display additional information or feedback based on the score -->
+  <% } else { %>
+    <p>Quiz Result will be displayed here after submission</p>
+  <% } %>
+
+  <script src="/public/js/quizScript.js"></script>
+</body>
+</html>
