@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const Question = require('./models/question'); // Import your Question model here
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -14,15 +15,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB connection setup
-mongoose.connect('mongodb://localhost/quizApp');
-mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+async function connectDb() {
+  try {
+    const res = await mongoose.connect('mongodb://localhost/quizApp')
+    console.log("Connected to the db successfully")
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  }
+  catch (err) {
+      console.log(err.message);
+  }
+}
+
 
 // Routes setup
 const indexRouter = require('./routes/index');
-const quizRouter = require('./routes/quizRouter'); // Change to your quiz router file name
+// const quizRouter = require('./routes/quizRouter');
 
 app.use('/', indexRouter);
-app.use('/questions/', quizRouter);
+// app.use('/questions', quizRouter);
 
 
 
@@ -45,7 +58,7 @@ app.post('/questions/createQuestion', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+
+
+connectDb();
