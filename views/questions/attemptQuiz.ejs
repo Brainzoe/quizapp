@@ -1,11 +1,15 @@
-<!-- Attempt Quiz Page -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ... (your header content) ... -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <!-- custom css file link  -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <%- include('../layouts/mainLayout') %>
+  <h1>Attempt Quiz</h1>
   <form id="quizForm" action="/attemptQuiz" method="POST" onsubmit="return validateForm()">
     <% questions.forEach((question, index) => { %>
       <!-- Display questions and options -->
