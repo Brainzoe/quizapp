@@ -1,57 +1,19 @@
-// const express = require('express');
-// const Question = require('../models/question');
-// const router = express.Router();
-
-// // Landing page
-// router.get('/', (req, res) => {
-//   res.render('index'); // Render your landing page (index.ejs)
-// });
-
-// router.get('/uploadQuiz', async (req, res) => {
-//   try {
-//     res.render('questions/uploadQuestion'); // Render 'attemptQuiz.ejs' with fetched questions
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
-
-// // Attempt Quiz
-// router.get('/attemptQuiz', async (req, res) => {
-//   const questions = await Question.find()
-//   console.log(questions)
-//   res.render('./questions/attemptQuiz',{questions}); // Render the attempt quiz page (attemptQuiz.ejs)
-// });
-
-// // Show Questions
-// router.get('/showQuestions', (req, res) => {
-//   res.render('questions/showQuestions'); // Render the show questions page (showQuestions.ejs)
-// });
-
-// // Quiz Results
-// router.get('/quizResult', (req, res) => {
-//   res.render('questions/quizResult'); // Render the quiz results page (quizResult.ejs)
-// });
-
-// module.exports = router;
-
 const express = require('express');
 const router = express.Router();
 const Question = require('../models/question');
 
 // Route to display the home page
 router.get('/', (req, res) => {
-  res.render('index',{ body: '' }); // Render 'home.ejs'
+  res.render('index', { body: '' }); // Render 'home.ejs'
 });
 // Route to render upload quiz page
 router.get('/uploadQuiz', (req, res) => {
   try {
-    res.render('questions/uploadQuestion',{ body: 'layouts/mainLayout' }); // Render 'attemptQuiz.ejs' with fetched questions
+    res.render('questions/uploadQuestion', { body: 'layouts/mainLayout' }); // Render 'attemptQuiz.ejs' with fetched questions
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 
 
@@ -59,72 +21,98 @@ router.get('/uploadQuiz', (req, res) => {
 router.get('/attemptQuiz', async (req, res) => {
   try {
     const questions = await Question.find(); // Fetch questions from the database
-    res.render('questions/attemptQuiz',{ body: 'layouts/mainLayout',questions }); // Render 'attemptQuiz.ejs' with fetched questions
+    res.render('questions/attemptQuiz', { body: 'layouts/mainLayout', questions }); // Render 'attemptQuiz.ejs' with fetched questions
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // Show Questions
-router.get('/showQuestions',async (req, res) => {
+router.get('/showQuestions', async (req, res) => {
   const questions = await Question.find();
-  res.render('questions/showQuestions',{ body: 'layouts/mainLayout',questions }); // Render the show questions page (showQuestions.ejs)
+  res.render('questions/showQuestions', { body: 'layouts/mainLayout', questions }); // Render the show questions page (showQuestions.ejs)
 });
 
-// Quiz Results
-// Inside your route handler for rendering quiz result
-router.get('/quizResult', async (req, res) => {
+// Route to handle quiz submission and calculate score
+router.post('/quizResult', async (req, res) => {
   try {
-    // Fetch all questions from the database
-    const questions = await Question.find();
+    const submittedAnswers = req.body; // Submitted answers from the form
+    const questions = await Question.find(); // Fetch questions from the database
 
     // Calculate total number of questions
     const totalQuestions = questions.length;
-
-    // Logic to simulate user-submitted answers (replace this with actual user-submitted answers)
-    const submittedAnswers = {
-      questionId1: 'selectedAnswer1',
-      questionId2: 'selectedAnswer2',
-      // ... Add all submitted answers here
-    };
 
     // Calculate score based on submitted answers
     let score = 0;
     for (const questionId in submittedAnswers) {
       const selectedAnswer = submittedAnswers[questionId];
-      const question = questions.find(q => q.id === questionId); // Assuming question has id property
-      if (question && question.correctAnswer === selectedAnswer) {
+      const question = questions.find(q => q.id === questionId); // Find question by ID
+      if (question && question.correctAnswer.toString() === selectedAnswer) {
         score++;
       }
     }
 
-    res.render('questions/quizResult', { body: 'layouts/mainLayout',score, totalQuestions });
+    res.render('questions/quizResult', { body: 'layouts/mainLayout', score, totalQuestions });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Route to handle quiz submission
-router.post('/submitQuiz', async (req, res) => {
+
+
+
+// Inside your router setup
+router.get('/quizResult', async (req, res) => {
   try {
-    const submittedAnswers = req.body; // Submitted answers from the form
-    // Logic to evaluate answers and calculate score
+    const questions = await Question.find(); // Fetch questions from the database
+
+    const totalQuestions = questions.length;
+
+    // Get the submitted answers from the request body
+    const submittedAnswers = req.body.answers || [];
+
     let score = 0;
-    for (const questionId in submittedAnswers) {
-      const selectedAnswer = submittedAnswers[questionId];
-      const question = await Question.findById(questionId);
-      if (question && question.correctAnswer === parseInt(selectedAnswer)) {
+    questions.forEach((question, index) => {
+      const correctAnswerIndex = question.correctAnswer; // Assuming correctAnswer holds the index of the correct answer
+
+      // Check if the submitted answer matches the correct answer
+      if (submittedAnswers[index] !== undefined && submittedAnswers[index] === String(correctAnswerIndex)) {
         score++;
       }
-    }
-    // Render result page with the calculated score
-    res.render('questions/quizResult', { score });
+    });
+
+    // Render the quiz result page with score and total questions
+    res.render('questions/quizResult', { body: 'layouts/mainLayout', score, totalQuestions });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Other routes for managing questions (e.g., creating, editing, deleting)
+
+router.post('/attemptQuiz', async (req, res) => {
+  try {
+    const submittedAnswers = req.body.answers; // Get the submitted answers array
+
+    const questions = await Question.find(); // Fetch questions from the database
+    const totalQuestions = questions.length;
+
+    let score = 0;
+    questions.forEach((question, index) => {
+      const correctAnswerIndex = question.correctAnswer; // Assuming correctAnswer holds the index of the correct answer
+
+      // Check if the submitted answer matches the correct answer
+      if (submittedAnswers[index] !== undefined && submittedAnswers[index] === String(correctAnswerIndex)) {
+        score++;
+      }
+    });
+
+    res.render('questions/quizResult', { body: 'layouts/mainLayout', score, totalQuestions });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 // Route to render the create question form
 router.get('/createQuestion', (req, res) => {

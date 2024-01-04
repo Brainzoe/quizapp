@@ -1,24 +1,34 @@
+<!-- views/questions/quizResult.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Quiz App - Quiz Result</title>
-   <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-   <!-- custom css file link  -->
-   <link rel="stylesheet" href="/css/styles.css">
+  <title>Quiz Result</title>
+  <!-- Include any CSS stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <%- include('../layouts/mainLayout') %>
+ <%- include('../layouts/mainLayout') %>
   <h1>Quiz Result</h1>
-  <% if (score !== undefined) { %>
+  
+  <% if (score !== undefined && totalQuestions !== undefined) { %>
     <p>Your score: <%= score %> out of <%= totalQuestions %></p>
-    <!-- Display additional information or feedback based on the score -->
+    <!-- Add personalized messages based on the score if needed -->
+    <% if (score >= 8) { %>
+      <p>Great job! You really know your stuff!</p>
+    <% } else if (score >= 5) { %>
+      <p>Not bad, but there's room for improvement.</p>
+    <% } else { %>
+      <p>Don't worry, practice makes perfect!</p>
+    <% } %>
   <% } else { %>
-    <p>Quiz Result will be displayed here after submission</p>
+    <p>Score not available.</p>
   <% } %>
 
-  <script src="/js/quizScript.js"></script>
+  <!-- Include any additional content or feedback based on the score -->
+
+  <!-- Include any JavaScript files -->
+  <script src="/js/scripts.js"></script>
 </body>
 </html>

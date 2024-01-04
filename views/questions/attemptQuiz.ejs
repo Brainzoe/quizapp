@@ -1,58 +1,39 @@
+<!-- Attempt Quiz Page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Quiz App - Attempt Quiz</title>
-  <!-- Add necessary stylesheets -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="/css/styles.css">
-  <style>
- 
-    /* Style the erase button */
-    .erase-btn {
-      margin-left: 10px;
-      cursor: pointer;
-      color: #ff0800;
-      border: none;
-      background: none;
-      
-    }
-    img {
-      width: 20px;
-      
-    }
-  </style>
+  <!-- ... (your header content) ... -->
 </head>
-
 <body>
   <%- include('../layouts/mainLayout') %>
-  <form action="/attemptQuiz" method="POST">
+  <form id="quizForm" action="/attemptQuiz" method="POST" onsubmit="return validateForm()">
     <% questions.forEach((question, index) => { %>
+      <!-- Display questions and options -->
       <p><%= question.question %></p>
-      <label for="optionA_<%= index %>"><%= question.answers[0] %></label>
-      <input type="radio" id="optionA_<%= index %>" name="answer_<%= index %>" value="0">
-      <label for="optionB_<%= index %>"><%= question.answers[1] %></label>
-      <input type="radio" id="optionB_<%= index %>" name="answer_<%= index %>" value="1">
-      <!-- Add an "Erase" option next to each set of radio buttons -->
-      <button type="button" class="erase-btn" onclick="clearRadio('answer_<%= index %>')">
-        <img src="/img/zyro-image (3).png" alt="">
-      </button>
+      <% question.answers.forEach((answer, ansIndex) => { %>
+        <label for="option_<%= index %>_<%= ansIndex %>"><%= answer %></label>
+        <input type="radio" id="option_<%= index %>_<%= ansIndex %>" name="answers[<%= index %>]" value="<%= ansIndex %>">
+      <% }) %>
     <% }) %>
     <button type="submit">Submit Answers</button>
   </form>
-  
+
   <script>
-    // JavaScript function to clear radio buttons by name
-    function clearRadio(name) {
-      const radios = document.querySelectorAll(`input[name="${name}"]:checked`);
-      radios.forEach(radio => {
-        radio.checked = false;
+    // Validate the form before submission
+    function validateForm() {
+      const allRadios = document.querySelectorAll('input[type="radio"]');
+      let radioChecked = false;
+      allRadios.forEach(radio => {
+        if (radio.checked) {
+          radioChecked = true;
+        }
       });
+      if (!radioChecked) {
+        alert('Please answer all questions before submitting.');
+        return false; // Prevent form submission if validation fails
+      }
+      return true; // Allow form submission if validation passes
     }
   </script>
-  
-
-  <script src="/js/quizScript.js"></script>
 </body>
-
 </html>
