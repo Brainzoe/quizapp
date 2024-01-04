@@ -41,12 +41,12 @@ const Question = require('../models/question');
 
 // Route to display the home page
 router.get('/', (req, res) => {
-  res.render('index'); // Render 'home.ejs'
+  res.render('index',{ body: '' }); // Render 'home.ejs'
 });
 // Route to render upload quiz page
-router.get('/uploadQuiz', async (req, res) => {
+router.get('/uploadQuiz', (req, res) => {
   try {
-    res.render('questions/uploadQuestion'); // Render 'attemptQuiz.ejs' with fetched questions
+    res.render('questions/uploadQuestion',{ body: 'layouts/mainLayout' }); // Render 'attemptQuiz.ejs' with fetched questions
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -59,7 +59,7 @@ router.get('/uploadQuiz', async (req, res) => {
 router.get('/attemptQuiz', async (req, res) => {
   try {
     const questions = await Question.find(); // Fetch questions from the database
-    res.render('questions/attemptQuiz', { questions }); // Render 'attemptQuiz.ejs' with fetched questions
+    res.render('questions/attemptQuiz',{ body: 'layouts/mainLayout',questions }); // Render 'attemptQuiz.ejs' with fetched questions
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -68,7 +68,7 @@ router.get('/attemptQuiz', async (req, res) => {
 // Show Questions
 router.get('/showQuestions',async (req, res) => {
   const questions = await Question.find();
-  res.render('questions/showQuestions',{questions}); // Render the show questions page (showQuestions.ejs)
+  res.render('questions/showQuestions',{ body: 'layouts/mainLayout',questions }); // Render the show questions page (showQuestions.ejs)
 });
 
 // Quiz Results
@@ -98,7 +98,7 @@ router.get('/quizResult', async (req, res) => {
       }
     }
 
-    res.render('questions/quizResult', { score, totalQuestions });
+    res.render('questions/quizResult', { body: 'layouts/mainLayout',score, totalQuestions });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

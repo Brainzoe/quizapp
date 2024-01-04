@@ -4,19 +4,55 @@
   <meta charset="UTF-8">
   <title>Quiz App - Attempt Quiz</title>
   <!-- Add necessary stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+ 
+    /* Style the erase button */
+    .erase-btn {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #ff0800;
+      border: none;
+      background: none;
+      
+    }
+    img {
+      width: 20px;
+      
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Attempt Quiz</h1>
-  <form action="/attempt" method="POST">
+  <%- include('../layouts/mainLayout') %>
+  <form action="/attemptQuiz" method="POST">
     <% questions.forEach((question, index) => { %>
-      <h3><%= question.question %></h3>
-      <% question.answers.forEach((answer, ansIndex) => { %>
-        <input type="radio" name="answer_<%= index %>" value="<%= ansIndex %>">
-        <label><%= answer %></label><br>
-      <% }) %>
+      <p><%= question.question %></p>
+      <label for="optionA_<%= index %>"><%= question.answers[0] %></label>
+      <input type="radio" id="optionA_<%= index %>" name="answer_<%= index %>" value="0">
+      <label for="optionB_<%= index %>"><%= question.answers[1] %></label>
+      <input type="radio" id="optionB_<%= index %>" name="answer_<%= index %>" value="1">
+      <!-- Add an "Erase" option next to each set of radio buttons -->
+      <button type="button" class="erase-btn" onclick="clearRadio('answer_<%= index %>')">
+        <img src="/img/zyro-image (3).png" alt="">
+      </button>
     <% }) %>
     <button type="submit">Submit Answers</button>
   </form>
-  <script src="../public/js/quizScript.js"></script>
+  
+  <script>
+    // JavaScript function to clear radio buttons by name
+    function clearRadio(name) {
+      const radios = document.querySelectorAll(`input[name="${name}"]:checked`);
+      radios.forEach(radio => {
+        radio.checked = false;
+      });
+    }
+  </script>
+  
+
+  <script src="/js/quizScript.js"></script>
 </body>
+
 </html>

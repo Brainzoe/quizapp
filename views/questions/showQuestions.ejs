@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz App - Show Questions</title>
-  <!-- Add necessary stylesheets -->
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+  <%- include('../layouts/mainLayout') %>
   <h1>Show Questions</h1>
   <ul>
     <% questions.forEach((question, index) => { %>
@@ -17,8 +22,8 @@
       </ul>
     <% }) %>
   </ul>
-  <a href="./uploadQuestion.ejs">Upload Question</a>
+  <a href="/uploadQuiz">Upload Question</a>
 
-  <script src="/public/js/quizScript.js"></script>
+  <script src="/js/quizScript.js"></script>
 </body>
 </html>

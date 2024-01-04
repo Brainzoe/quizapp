@@ -8,11 +8,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <!-- custom css file link  -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/styles.css">
 
 
 </head>
 <body>
+  <%- include('../layouts/mainLayout') %>
   <h1>Upload Question</h1>
   <form action="/questions/createQuestion" method="POST">
     <input type="text" name="question" placeholder="Enter question">
@@ -22,6 +23,6 @@
     <button type="submit">Submit</button>
   </form>
 
-  <script src="/public/js/quizScript.js"></script>
+  <script src="/js/quizScript.js"></script>
 </body>
 </html>
